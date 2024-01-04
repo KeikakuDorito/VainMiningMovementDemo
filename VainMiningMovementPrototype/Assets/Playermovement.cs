@@ -9,7 +9,8 @@ public class Playermovement : MonoBehaviour
     //float xInput;
     //float yInput;
     float movementSpeed = 5f;
-    Vector3 input; 
+    Vector3 input;
+    Vector3 skewedInput;
 
     // Start is called before the first frame update
     void Start()
@@ -30,6 +31,11 @@ public class Playermovement : MonoBehaviour
         getInput();
         //look at mouse
         rotateToMouse();
+
+        if (Input.GetKeyDown("space"))
+        {
+            Dash();
+        }
     }
 
     void getInput()
@@ -41,7 +47,7 @@ public class Playermovement : MonoBehaviour
     {
         var matrix = Matrix4x4.Rotate(Quaternion.Euler(0, 45, 0));
 
-        var skewedInput = matrix.MultiplyPoint3x4(input);
+        skewedInput = matrix.MultiplyPoint3x4(input);
 
         rb.MovePosition(transform.position + skewedInput * movementSpeed * Time.deltaTime);
     }
@@ -67,8 +73,9 @@ public class Playermovement : MonoBehaviour
         //Vector3 input = new Vector3 
     }
 
-    //void Dash()
-    //{
-
-    //}
+    void Dash()
+    {
+        rb.AddForce(skewedInput * 10f, ForceMode.Impulse);
+        Debug.Log("kk");
+    }
 }
